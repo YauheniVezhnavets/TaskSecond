@@ -14,7 +14,16 @@ public class Main {
 
         LOGGER.info("Program started");
 
+        try {
+            CharArrayProcessor charArrayProcessor = new CharArrayProcessor();
+            RegExpProcessor regExpProcessor = new RegExpProcessor();
+            charArrayProcessor.deleteWordStartingConsonantLetter("London is a capital of Great Britain",5);
+            charArrayProcessor.changeLetterForAnotherLetter("London is a capital of Great Britain",2,'m');
+            regExpProcessor.deleteWordStartingConsonantLetter("London is a capital of Great Britain",5);
 
+        } catch (Exception e){
+            LOGGER.error(e.getMessage(),e);
+        }
 
 
         LOGGER.info("Program stopped");
