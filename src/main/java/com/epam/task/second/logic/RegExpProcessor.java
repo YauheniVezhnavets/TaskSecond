@@ -1,34 +1,41 @@
 package com.epam.task.second.logic;
 
 
-import java.util.Arrays;
-import java.util.List;
+import org.apache.log4j.Logger;
 
 public class RegExpProcessor implements StringProcessor {
-    private final String REG_EXP = "(?i)^(?=[^aeiouy])[a-z].*";
+    private final static org.apache.log4j.Logger LOGGER = Logger.getLogger(RegExpProcessor.class);
+    private final String DELETING_WORD_PATTERN = "(?i)^(?=[^aeiouy])[a-z].*";
+    private final String WHITESPACE_SEPARATOR = "\\s+";
+    private final String EMPTY_LINE = "";
+    private final String WHITESPACE_ADD = " ";
 
     @Override
-    public String deleteWordStartingConsonantLetter(String str, int wordLength) {
+    public String deleteWordStartingConsonantLetter(String string, int wordLength) {
+        LOGGER.info("Method deleteWordStartingConsonantLetter started ");
 
-        if (str.isEmpty()) {
-            return "Line is empty";
+        if (string.isEmpty()){
+            return EMPTY_LINE;
         }
 
-        List<String> words = Arrays.asList(str.split("\\s+"));
+
+        String[] words = string.split(WHITESPACE_SEPARATOR);
 
         StringBuilder stringBuilder = new StringBuilder();
 
         for (String word : words) {
-            if (!word.matches(REG_EXP)) {
+            if (!word.matches(DELETING_WORD_PATTERN)) {
                 stringBuilder.append(word);
-                stringBuilder.append(" ");
-            } else if ((word.matches(REG_EXP)) && ((word.length()) != wordLength)) {
+                stringBuilder.append(WHITESPACE_ADD);
+            } else if ((word.matches(DELETING_WORD_PATTERN)) && ((word.length()) != wordLength)) {
                 stringBuilder.append(word);
-                stringBuilder.append(" ");
+                stringBuilder.append(WHITESPACE_ADD);
             }
         }
 
         String result = stringBuilder.toString();
+
+        LOGGER.info("Method deleteWordStartingConsonantLetter ended ");
 
         return result.trim();
     }
@@ -36,12 +43,13 @@ public class RegExpProcessor implements StringProcessor {
     @Override
     public String changeLetterForAnotherLetter(String string, int numberOfLetter, char letter) {
 
-        if (string.isEmpty()) {
-            return "Line is empty";
+        LOGGER.info("Method changeLetterForAnotherLetter started ");
+
+        if (string.isEmpty()){
+            return EMPTY_LINE;
         }
 
-
-        List<String> words = Arrays.asList(string.split("\\s+"));
+        String[] words = string.split(WHITESPACE_SEPARATOR);
 
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -51,26 +59,28 @@ public class RegExpProcessor implements StringProcessor {
             } else {
                 stringBuilder.append(word);
             }
-            stringBuilder.append(" ");
+            stringBuilder.append(WHITESPACE_ADD);
 
         }
 
         String result = stringBuilder.toString();
 
+        LOGGER.info("Method changeLetterForAnotherLetter started ");
+
         return result.trim();
     }
 
-    String replaceLetter(String str, int numberOfLetter, char letter) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.setCharAt(numberOfLetter, letter);
+    private String replaceLetter(String str, int numberOfLetter, char letter) {
+        StringBuilder stringBuilder = new StringBuilder(str);
+        stringBuilder.setCharAt(numberOfLetter-1, letter);
         return stringBuilder.toString();
     }
 
 
-    boolean validateIndexNumber(String string, int numberOfLetter) {
+    private boolean validateIndexNumber(String string, int numberOfLetter) {
         boolean result = false;
 
-        if ((numberOfLetter > 0) && (numberOfLetter < string.length())) {
+        if ((numberOfLetter > 0) && (numberOfLetter <= string.length())) {
             result = true;
         }
         return result;
